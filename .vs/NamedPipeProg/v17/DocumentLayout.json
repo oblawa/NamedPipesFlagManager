@@ -1,0 +1,121 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\zakir\\source\\repos\\NamedPipeProg\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A8EAE528-4F92-42A3-AC91-56E283478738}|NamedPipeProg\\NamedPipeProg.csproj|c:\\users\\zakir\\source\\repos\\namedpipeprog\\namedpipeprog\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8EAE528-4F92-42A3-AC91-56E283478738}|NamedPipeProg\\NamedPipeProg.csproj|solutionrelative:namedpipeprog\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8EAE528-4F92-42A3-AC91-56E283478738}|NamedPipeProg\\NamedPipeProg.csproj|c:\\users\\zakir\\source\\repos\\namedpipeprog\\namedpipeprog\\np\\namedpipesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8EAE528-4F92-42A3-AC91-56E283478738}|NamedPipeProg\\NamedPipeProg.csproj|solutionrelative:namedpipeprog\\np\\namedpipesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8EAE528-4F92-42A3-AC91-56E283478738}|NamedPipeProg\\NamedPipeProg.csproj|c:\\users\\zakir\\source\\repos\\namedpipeprog\\namedpipeprog\\np\\clientpipe.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8EAE528-4F92-42A3-AC91-56E283478738}|NamedPipeProg\\NamedPipeProg.csproj|solutionrelative:namedpipeprog\\np\\clientpipe.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8EAE528-4F92-42A3-AC91-56E283478738}|NamedPipeProg\\NamedPipeProg.csproj|c:\\users\\zakir\\source\\repos\\namedpipeprog\\namedpipeprog\\np\\serverpipe.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8EAE528-4F92-42A3-AC91-56E283478738}|NamedPipeProg\\NamedPipeProg.csproj|solutionrelative:namedpipeprog\\np\\serverpipe.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8EAE528-4F92-42A3-AC91-56E283478738}|NamedPipeProg\\NamedPipeProg.csproj|c:\\users\\zakir\\source\\repos\\namedpipeprog\\namedpipeprog\\np\\basicpipe.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8EAE528-4F92-42A3-AC91-56E283478738}|NamedPipeProg\\NamedPipeProg.csproj|solutionrelative:namedpipeprog\\np\\basicpipe.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8EAE528-4F92-42A3-AC91-56E283478738}|NamedPipeProg\\NamedPipeProg.csproj|c:\\users\\zakir\\source\\repos\\namedpipeprog\\namedpipeprog\\np\\pipeeventargs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8EAE528-4F92-42A3-AC91-56E283478738}|NamedPipeProg\\NamedPipeProg.csproj|solutionrelative:namedpipeprog\\np\\pipeeventargs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "NamedPipesService.cs",
+              "DocumentMoniker": "C:\\Users\\zakir\\source\\repos\\NamedPipeProg\\NamedPipeProg\\NP\\NamedPipesService.cs",
+              "RelativeDocumentMoniker": "NamedPipeProg\\NP\\NamedPipesService.cs",
+              "ToolTip": "C:\\Users\\zakir\\source\\repos\\NamedPipeProg\\NamedPipeProg\\NP\\NamedPipesService.cs",
+              "RelativeToolTip": "NamedPipeProg\\NP\\NamedPipesService.cs",
+              "ViewState": "AQIAAA4AAAAAAAAAAAAAwKgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T07:51:25.465Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ClientPipe.cs",
+              "DocumentMoniker": "C:\\Users\\zakir\\source\\repos\\NamedPipeProg\\NamedPipeProg\\NP\\ClientPipe.cs",
+              "RelativeDocumentMoniker": "NamedPipeProg\\NP\\ClientPipe.cs",
+              "ToolTip": "C:\\Users\\zakir\\source\\repos\\NamedPipeProg\\NamedPipeProg\\NP\\ClientPipe.cs",
+              "RelativeToolTip": "NamedPipeProg\\NP\\ClientPipe.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAANgAAABUAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T05:19:55.203Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ServerPipe.cs",
+              "DocumentMoniker": "C:\\Users\\zakir\\source\\repos\\NamedPipeProg\\NamedPipeProg\\NP\\ServerPipe.cs",
+              "RelativeDocumentMoniker": "NamedPipeProg\\NP\\ServerPipe.cs",
+              "ToolTip": "C:\\Users\\zakir\\source\\repos\\NamedPipeProg\\NamedPipeProg\\NP\\ServerPipe.cs",
+              "RelativeToolTip": "NamedPipeProg\\NP\\ServerPipe.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T05:16:26.214Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "BasicPipe.cs",
+              "DocumentMoniker": "C:\\Users\\zakir\\source\\repos\\NamedPipeProg\\NamedPipeProg\\NP\\BasicPipe.cs",
+              "RelativeDocumentMoniker": "NamedPipeProg\\NP\\BasicPipe.cs",
+              "ToolTip": "C:\\Users\\zakir\\source\\repos\\NamedPipeProg\\NamedPipeProg\\NP\\BasicPipe.cs",
+              "RelativeToolTip": "NamedPipeProg\\NP\\BasicPipe.cs",
+              "ViewState": "AQIAAAgAAAAAAAAAAAAQwAgAAAA3AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T05:11:00.072Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "PipeEventArgs.cs",
+              "DocumentMoniker": "C:\\Users\\zakir\\source\\repos\\NamedPipeProg\\NamedPipeProg\\NP\\PipeEventArgs.cs",
+              "RelativeDocumentMoniker": "NamedPipeProg\\NP\\PipeEventArgs.cs",
+              "ToolTip": "C:\\Users\\zakir\\source\\repos\\NamedPipeProg\\NamedPipeProg\\NP\\PipeEventArgs.cs",
+              "RelativeToolTip": "NamedPipeProg\\NP\\PipeEventArgs.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T05:11:23.581Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\zakir\\source\\repos\\NamedPipeProg\\NamedPipeProg\\Program.cs",
+              "RelativeDocumentMoniker": "NamedPipeProg\\Program.cs",
+              "ToolTip": "C:\\Users\\zakir\\source\\repos\\NamedPipeProg\\NamedPipeProg\\Program.cs",
+              "RelativeToolTip": "NamedPipeProg\\Program.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABwAAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-01T08:01:28.956Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
