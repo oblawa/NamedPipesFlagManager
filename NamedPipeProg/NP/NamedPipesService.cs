@@ -6,12 +6,11 @@ namespace NamedPipeProg.NP
     {
 
         List<ServerPipe> serverPipes = new List<ServerPipe>();
-        ServerPipe nextServer;
 
         ConcurrentDictionary<string, byte> flags = new ConcurrentDictionary<string, byte>();
         ConcurrentDictionary<string, List<ServerPipe>> flagSubs = new ConcurrentDictionary<string, List<ServerPipe>>();
 
-        Action<string> flagChanged;
+        Func<string, Task> flagChanged;
         public NamedPipesServerService()
         {
             flagChanged += FlagChanged;            
@@ -24,30 +23,26 @@ namespace NamedPipeProg.NP
 
             serverPipe.DataReceived += (sndr, args) => HandleRecieve(args.String, serverPipe);
 
-            serverPipe.PipeConnected += (sndr, args) => nextServer = CreateServer();
+            serverPipe.PipeConnected += (sndr, args) => CreateServer();
             return serverPipe;
         }
-        void SendError(ServerPipe pipe, string errorMessage)
-        {
-            pipe.WriteStringAsync($"ERROR:{errorMessage}");
-        }
-        void HandleRecieve(string message, ServerPipe pipe)
+        async Task HandleRecieve(string message, ServerPipe pipe)
         {
             string[] messageParts = message.Split(":");
             if (messageParts.Length < 2 || messageParts.Length > 3)
             {
-                SendError(pipe, "Pipe-серверу был отправлен запрос с некорректным форматом.");
+                pipe.WriteStringAsync("A request with an incorrect format was sent to the Pipe server.");
             }
 
             string command = messageParts[0];
             string flag = messageParts[1];
             byte? value = messageParts.Length == 3 ? Byte.Parse(messageParts[2]) : null;
             /**
-             Шаблон ответа на запрос: 
-                *Тип ответа ERROR/SUCCESS/NOTIFY*:*Использованная команда GET/SET/CHANGE/REMOVE/SUB/UNSUB*:*Название флага*:*Доп. информация (если ERROR, то сообщение об ошибке; если GET то значение флага)*
-             Пример:
+             Request response template:
+                *Type of response ERROR/SUCCESS/NOTIFY*:*The command used GET/SET/CHANGE/REMOVE/SUB/UNSUB*:*Name of the flag*:*Additional info (on ERROR, return an error message; on GET, return the flag value)*
+             Examples:
                 SUCCESS:GET:flag1:3
-                ERROR:SET:flag1:Флаг flag1 уже существует
+                ERROR:SET:flag1:The flag flag1 already exists
                 NOTIFY:CHANGE:flag1:4
                 SUCCESS:SET:flag2
                 SUCCESS:REMOVE:flag2
@@ -60,24 +55,24 @@ namespace NamedPipeProg.NP
                     break;
                 case "SET":
                     if (!value.HasValue)
-                        pipe.WriteStringAsync($"ERROR:{command}:{flag}:SET-запрос на установку флага {flag} отправлен без указания значения.");
+                        pipe.WriteStringAsync($"ERROR:{command}:{flag}:SET-request to set the {flag} flag was sent without specifying a value.");
                     else
                     {
                         if (flags.SetFlag(flag, value.Value))                      
                             pipe.WriteStringAsync($"SUCCESS:{command}:{flag}:{value}");
                         else                      
-                            pipe.WriteStringAsync($"ERROR:{command}:{flag}:Не удалось установить флаг {flag}.");
+                            pipe.WriteStringAsync($"ERROR:{command}:{flag}:The {flag} flag could not be set.");
                     }
                     break;
                 case "CHANGE":
                     if (!value.HasValue)
-                        pipe.WriteStringAsync($"ERROR:{command}:{flag}:CHANGE-запрос на изменение флага отправлен без указания значения");
+                        pipe.WriteStringAsync($"ERROR:{command}:{flag}:CHANGE-request to change the flag was sent without specifying a value.");
                     else
                     {
                         if (flags.ChangeFlagValue(flag, value.Value) == value.Value)
                             pipe.WriteStringAsync($"SUCCESS:{command}:{flag}:{value}");
                         else
-                            pipe.WriteStringAsync($"ERROR:{command}:{flag}:Не удалось обновить значение флага {flag} на {value.Value}.");
+                            pipe.WriteStringAsync($"ERROR:{command}:{flag}:Failed to update the value of the {flag} to {value.Value}.");
                     }
                     flagChanged.Invoke(flag);
                     break;
@@ -85,7 +80,7 @@ namespace NamedPipeProg.NP
                     if (flags.RemoveFlag(flag))
                         pipe.WriteStringAsync($"SUCCESS:{command}:{flag}");
                     else
-                        pipe.WriteStringAsync($"ERROR:{command}:{flag}:Не удалось удалить флаг {flag}");
+                        pipe.WriteStringAsync($"ERROR:{command}:{flag}:Couldn't delete the {flag}");
                     flagChanged.Invoke(flag);
                     break;
                 case "SUB":
@@ -108,12 +103,11 @@ namespace NamedPipeProg.NP
                     pipe.WriteStringAsync($"SUCCESS:{command}:{flag}");
                     break;
                 default:
-                    //SendError(pipe, "Pipe-серверу была отправлена не существующая команда");
-                    pipe.WriteStringAsync($"ERROR:Pipe-серверу была отправлена не существующая команда");
+                    pipe.WriteStringAsync($"ERROR:A non-existent command was sent to the Pipe server.");
                     break;
             }
         }
-        void FlagChanged(string flag) 
+        async Task FlagChanged(string flag) 
         {
             foreach (var fs in flagSubs) 
             {
@@ -137,7 +131,6 @@ namespace NamedPipeProg.NP
             ClientPipe clientPipe = new ClientPipe(".", "Test", p => p.StartStringReaderAsync());
             clientPipes.Add(clientPipe);
 
-            //clientPipe.DataReceived += (sndr, args) => Console.WriteLine($"Клиент {clientIdx} принял сообщение: {args.String}");
             clientPipe.DataReceived += (sndr, args) => clientPipe.OnDataRecieved(args.String);
             clientPipe.Connect();
             return clientPipe;

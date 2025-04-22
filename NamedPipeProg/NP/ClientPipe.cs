@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Data;
 using System.IO.Pipes;
 
 namespace NamedPipeProg.NP
@@ -12,20 +13,20 @@ namespace NamedPipeProg.NP
         public ClientPipe(string serverName, string pipeName, Action<BasicPipe> asyncReaderStart)
         {
             this.asyncReaderStart = asyncReaderStart;
-            clientPipeStream = new NamedPipeClientStream(serverName, pipeName, PipeDirection.InOut, PipeOptions.Asynchronous);
+            clientPipeStream = new NamedPipeClientStream(serverName, pipeName, PipeDirection.InOut, PipeOptions.Asynchronous);            
             pipeStream = clientPipeStream;
         }
         public async Task<bool> SetFlag(string name, byte value)
         {
             if (!isConnected)
             {
-                Console.WriteLine($"Не удалось установить флаг {name}. Отсутствует подключение к именнованному каналу.");
+                Console.WriteLine($"The {name} flag could not be set. There is no connection to the named channel.");
                 return false;
             }
             var tcs = new TaskCompletionSource<string>();
             var key = Tuple.Create("SET", $"{name}:{value}");
             pendingRequests[key] = tcs;
-            this.WriteStringAsync($"SET:{name}:{value}");
+            await WriteStringAsync($"SET:{name}:{value}");
             try
             {
                 var res = await tcs.Task.WaitAsync(TimeSpan.FromSeconds(5));
@@ -35,13 +36,13 @@ namespace NamedPipeProg.NP
                     return true;
                 else 
                 {
-                    Console.WriteLine($"Ошибка при установке флага {name}: {resParts[1]}");
+                    Console.WriteLine($"Error when setting the {name} flag: {resParts[1]}");
                     return false;
                 }
             }
             catch (TimeoutException) 
             {
-                Console.WriteLine("Таймаут ожидания ответа SET-запроса к Pipe-серверу.");
+                Console.WriteLine("Timeout for waiting for the response of a SET request to the Pipe server.");
                 return false;
             }
             finally
@@ -53,13 +54,13 @@ namespace NamedPipeProg.NP
         {
             if (!isConnected)
             {
-                Console.WriteLine($"Не удалось получить флаг {name}. Отсутствует подключение к именнованному каналу.");
+                Console.WriteLine($"Couldn't get the {name} flag. There is no connection to the named channel.");
                 return null;
             }
             var tcs = new TaskCompletionSource<string>();
             var key = Tuple.Create("GET", name);
             pendingRequests[key] = tcs;
-            this.WriteStringAsync($"GET:{name}");
+            await WriteStringAsync($"GET:{name}");
             try
             {
                 string res = await tcs.Task.WaitAsync(TimeSpan.FromSeconds(5));
@@ -68,13 +69,13 @@ namespace NamedPipeProg.NP
                     return flagValue;
                 else
                 {
-                    Console.WriteLine($"Ошибка при попытке получения значения флага {name}: {resParts[1]}");
+                    Console.WriteLine($"Error when trying to get the value of the {{name}} flag: {{rus Parts[1]}}");
                     return null;
                 }
             }
             catch (TimeoutException) 
             {
-                Console.WriteLine("Таймаут ожидания ответа GET-запроса к Pipe-серверу.");
+                Console.WriteLine("Timeout for waiting for the response of a GET request to the Pipe server.");
                 return null;
             }
             finally
@@ -86,13 +87,13 @@ namespace NamedPipeProg.NP
         {
             if (!isConnected)
             {
-                Console.WriteLine($"Не удалось изменить флаг {name}. Отсутствует подключение к именнованному каналу.");
+                Console.WriteLine($"Couldn't change the {name} flag. There is no connection to the named channel.");
                 return false;
             }
             var tcs = new TaskCompletionSource<string>();
             var key = Tuple.Create("CHANGE", $"{name}:{value}");
             pendingRequests[key] = tcs;
-            this.WriteStringAsync($"CHANGE:{name}:{value}");
+            await WriteStringAsync($"CHANGE:{name}:{value}");
             try
             {
                 var res = await tcs.Task.WaitAsync(TimeSpan.FromSeconds(5));
@@ -101,13 +102,13 @@ namespace NamedPipeProg.NP
                     return true;
                 else
                 {
-                    Console.WriteLine($"Ошибка при обновлении значения флага {name}: {resParts[1]}");
+                    Console.WriteLine($"Error updating the value of the {name} flag: {resParts[1]}");
                     return false;
                 }
             }
             catch (TimeoutException)
             {
-                Console.WriteLine("Таймаут ожидания ответа CHANGE-запроса к Pipe-серверу.");
+                Console.WriteLine("Timeout for waiting for the response of a CHANGE request to the Pipe server.");
                 return false;
             }
             finally
@@ -115,23 +116,17 @@ namespace NamedPipeProg.NP
                 pendingRequests.TryRemove(key, out _);
             }
         }
-        //async Task<bool> WaitResultAsync(string key, TaskCompletionSource<string> tcs)
-        //{
-        //    var res = await tcs.Task.WaitAsync(TimeSpan.FromSeconds(5));
-        //    var resParts = res.Split(":");
-
-        //}
         public async Task<bool> RemoveFlag(string name)
         {
             if (!isConnected)
             {
-                Console.WriteLine($"Не удалось изменить флаг {name}. Отсутствует подключение к именнованному каналу.");
+                Console.WriteLine($"Couldn't change the {name} flag. There is no connection to the named channel.");
                 return false;
             }
             var tcs = new TaskCompletionSource<string>();
             var key = Tuple.Create("REMOVE", $"{name}");
             pendingRequests[key] = tcs;
-            this.WriteStringAsync($"REMOVE:{name}");
+            await WriteStringAsync($"REMOVE:{name}");
             try
             {
                 var res = await tcs.Task.WaitAsync(TimeSpan.FromSeconds(5));
@@ -140,13 +135,13 @@ namespace NamedPipeProg.NP
                     return true;
                 else
                 {
-                    Console.WriteLine($"Ошибка при удалении флага {name}: {resParts[1]}");
+                    Console.WriteLine($"Error deleting the {name} flag: {resParts[1]}");
                     return false;
                 }
             }
             catch (TimeoutException)
             {
-                Console.WriteLine("Таймаут ожидания ответа REMOVE-запроса к Pipe-серверу.");
+                Console.WriteLine("Timeout for waiting for the response of a REMOVE request to the Pipe server.");
                 return false;
             }
             finally
@@ -158,14 +153,14 @@ namespace NamedPipeProg.NP
         {
             if (!isConnected)
             {
-                Console.WriteLine($"Не удалось подписаться на флаг {name}. Отсутствует подключение к именнованному каналу.");
+                Console.WriteLine($"Couldn't subscribe to the {name} flag. There is no connection to the named channel.");
                 return false;
             }
             var tcs = new TaskCompletionSource<string>();
             var key = Tuple.Create("SUB", $"{name}");
             pendingRequests[key] = tcs;
 
-            this.WriteStringAsync($"SUB:{name}");
+            await WriteStringAsync($"SUB:{name}");
 
             try
             {
@@ -177,19 +172,19 @@ namespace NamedPipeProg.NP
                         return true;
                     else
                     {
-                        Console.WriteLine($"Не удалось добавить обработчик событий флага в список обработчиков.");
+                        Console.WriteLine($"The flag event handler could not be added to the list of handlers.");
                         return false;
                     }
                 }                    
                 else
                 {
-                    Console.WriteLine($"Ошибка при подписке на флаг {name}: {resParts[1]}");
+                    Console.WriteLine($"Error subscribing to the flag {name}: {resParts[1]}");
                     return false;
                 }
             }
             catch (TimeoutException)
             {
-                Console.WriteLine("Таймаут ожидания ответа SUB-запроса к Pipe-серверу.");
+                Console.WriteLine("Timeout for waiting for the response of a SUB request to the Pipe server.");
                 return false;
             }
             finally
@@ -201,13 +196,13 @@ namespace NamedPipeProg.NP
         {
             if (!isConnected)
             {
-                Console.WriteLine($"Не удалось отписаться от флага {name}. Отсутствует подключение к именнованному каналу.");
+                Console.WriteLine($"Couldn't unsubscribe from the {name} flag. There is no connection to the named channel.");
                 return false;
             }
             var tcs = new TaskCompletionSource<string>();
             var key = Tuple.Create("UNSUB", $"{name}");
             pendingRequests[key] = tcs;
-            this.WriteStringAsync($"UNSUB:{name}");
+            await WriteStringAsync($"UNSUB:{name}");
             try
             {
                 var res = await tcs.Task.WaitAsync(TimeSpan.FromSeconds(5));
@@ -218,19 +213,19 @@ namespace NamedPipeProg.NP
                         return true;
                     else
                     {
-                        Console.WriteLine($"Не удалось удалить обработчик событий флага из списка обработчиков.");
+                        Console.WriteLine($"Failed to remove the flag event handler from the list of handlers.");
                         return false;
                     }
                 }
                 else
                 {
-                    Console.WriteLine($"Ошибка при отписке на флаг {name}: {resParts[1]}");
+                    Console.WriteLine($"Error when unsubscribing to the {name} flag: {resParts[1]}");
                     return false;
                 }
             }
             catch (TimeoutException)
             {
-                Console.WriteLine("Таймаут ожидания ответа UNSUB-запроса к Pipe-серверу.");
+                Console.WriteLine("Timeout for waiting for the response of an UNSUB request to the Pipe server.");
                 return false;
             }
             finally
@@ -254,8 +249,7 @@ namespace NamedPipeProg.NP
                     var parts = message.Split(':');
                     if (parts.Length < 3)
                     {
-                        Console.WriteLine("Неправильный формат ответа от Pipe-сервера");
-                        return;
+                       throw new Exception("Incorrect response format from the Pipe server");
                     }
                     string messageType = parts[0];
                     string commandType = parts[1];
@@ -274,7 +268,7 @@ namespace NamedPipeProg.NP
                                 {
                                     if (!tcs.TrySetResult($"{flag}:{value}"))
                                     {
-                                        Console.WriteLine($"Ошибка при попытке установить значение (\"{commandType}\"{flag}) словарю pendingRequests.");
+                                        Console.WriteLine($"Error when trying to set the value (\"{commandType}\"{flag}) to the pendingRequests dictionary.");
                                         return;
                                     }
                                 }
@@ -282,13 +276,13 @@ namespace NamedPipeProg.NP
                                 {
                                     if (!tcs2.TrySetResult($"{flag}:{value}"))
                                     {
-                                        Console.WriteLine($"Ошибка при попытке установить значение (\"{commandType}\"{flag}) словарю pendingRequests.");
+                                        Console.WriteLine($"Error when trying to set the value (\"{commandType}\"{flag}) to the pendingRequests dictionary.");
                                         return;
                                     }
                                 }
                                 else
                                 {
-                                    Console.WriteLine($"Не удалось найти ключ (\"{commandType}\", {flag}) в словаре pendingRequests.");
+                                    Console.WriteLine($"The key (\"{commandType}\", {flag}) could not be found in the pendingRequests dictionary.");
                                     return;
                                 }
                             }
@@ -301,19 +295,19 @@ namespace NamedPipeProg.NP
                                 {
                                     if (!tcs.TrySetResult($"{flag}"))
                                     {
-                                        Console.WriteLine($"Ошибка при попытке установить значение ключу (\"{commandType}\":{flag}) словарю pendingRequests.");
+                                        Console.WriteLine($"Error when trying to set a value for the key (\"{commandType}\":{flag}) to the pending Requests dictionary.");
                                         return;
                                     }
                                 }
                                 else
                                 {
-                                    Console.WriteLine($"Не удалось найти ключ (\"{commandType}\":{flag}) в словаре pendingRequests.");
+                                    Console.WriteLine($"Couldn't find the key (\"{commandType}\":{flag}) in the pendingRequests dictionary.");
                                     return;
                                 }
                             }
                             else
                             {
-                                Console.WriteLine("Ответ от сервера на Pipe-запрос не соответствует шаблону.");
+                                Console.WriteLine("The response from the server to the Pipe request does not match the template.");
                             }
                             break;
                         case "ERROR":
@@ -330,13 +324,13 @@ namespace NamedPipeProg.NP
                                 {
                                     if (!tcs.TrySetResult($"{flag}:{error}"))
                                     {
-                                        Console.WriteLine($"Ошибка при попытке установить значение (\"{commandType}\"{flag}) словарю pendingRequests.");
+                                        Console.WriteLine($"Error when trying to set the value (\"{commandType}\"{flag}) to the pendingRequests dictionary.");
                                         return;
                                     }
                                 }
                                 else
                                 {
-                                    Console.WriteLine($"Не удалось найти ключ (\"{commandType}\", {flag}) в словаре pendingRequests.");
+                                    Console.WriteLine($"The key (\"{commandType}\", {flag}) could not be found in the pendingRequests dictionary.");
                                     return;
                                 }
                             }
@@ -356,7 +350,7 @@ namespace NamedPipeProg.NP
                             }
                             break;
                         default:
-                            Console.WriteLine("Клиент не смог обработать ответ");
+                            Console.WriteLine("The client was unable to process the response.");
                             break;
                     }
                 }

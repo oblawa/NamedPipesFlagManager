@@ -2,28 +2,28 @@
 
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-NamedPipesServerService namedPipesServerService = new NamedPipesServerService();
-namedPipesServerService.CreateServer();
+var serverService = new NamedPipesServerService();
+serverService.CreateServer();
 
-NamedPipesClientService namedPipesClientService = new NamedPipesClientService();
-var client1 = namedPipesClientService.CreateClient();
+var clientService = new NamedPipesClientService();
+var client1 = clientService.CreateClient();
 
-
-
-
-client1.SubscribeFlag("flag1", (f, v) =>
+await client1.SubscribeFlag("flag1", (f, v) =>
 {
-    Console.WriteLine($"Flag {f} changed the value to {v}");
+    Console.WriteLine($"The client1 has detected a flag {f} change to the value {v}");
 });
 
-bool suc = await client1.SetFlag("flag1", 1);
-if (suc)
-    Console.WriteLine("suc");
-//Thread.Sleep(15000);
+if (await client1.SetFlag("flag1", 1))
+    Console.WriteLine($"flag1 has been successfully set");
 
+var client2 = clientService.CreateClient();
 
-bool s = await client1.ChangeFlag("flag1", 2);
-if (s)
-    Console.WriteLine("s");
+byte? result = await client2.GetFlagValue("flag1");
+if (result != null)
+    Console.WriteLine($"flag1 = {result}");
 
-//Console.ReadLine();
+if (await client2.ChangeFlag("flag1", 2))
+    Console.WriteLine("flag1 has been successfully changed");
+
+if (await client1.RemoveFlag("flag1"))
+    Console.WriteLine("flag1 has been successfully removed");

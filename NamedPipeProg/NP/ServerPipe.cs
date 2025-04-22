@@ -34,7 +34,7 @@ namespace NamedPipeProg.NP
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Ошибка подключения: {ex.Message}");
+                Console.WriteLine($"Connection error: {ex.Message}");
                 Close();
             }
         }
